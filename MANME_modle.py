@@ -511,3 +511,4 @@ class MANME(BaseModel):
 		m = self.get_txt_embedding(sentences, lengths)
 
 		return self.compute_score(r, m, t, store_intermediary=True)
+		

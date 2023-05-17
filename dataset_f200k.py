@@ -20,12 +20,12 @@ class Fashion200K(MyDataset):
 	def __init__(self, split, vocab, transform, what_elements='triplet', load_image_feature=0, ** kw):
 		MyDataset.__init__(self, split, FASHION200K_IMAGE_DIR, vocab, transform=transform, what_elements=what_elements, load_image_feature=load_image_feature, **kw)
 
-
+        # 获取split标签文件
 		label_path = FASHION200K_ANNOTATION_DIR
 		label_files = [	f for f in os.listdir(label_path) if os.path.isfile(os.path.join(label_path, f)) ]
 		label_files = [f for f in label_files if split in f]
 
-
+        # 从标签文件中读取图像信息
 		self.imgs = []
 
 		def caption_post_process(s):
@@ -56,10 +56,11 @@ class Fashion200K(MyDataset):
 			self.validate_query_file = os.path.join(FASHION200K_IMAGE_DIR, f'{split}_queries.txt')
 			self.generate_test_queries_()
 
-
+        # generate the list of correct targets for each query
+        # 为每个查询生成正确的目标列表
 		if what_elements == 'query':
 			self.get_all_targets_()
-
+ 
 
 	def get_different_word(self, source_caption, target_caption):
 		source_words = source_caption.split()
@@ -104,7 +105,8 @@ class Fashion200K(MyDataset):
 	def caption_index_init_(self):
 		""" index caption to generate training query-target example on the fly later"""
 
-
+        # index caption 2 caption_id and caption 2 image_ids
+		# #索引标题2 caption_id和标题2 image_ids
 		caption2id = {}
 		id2caption = {}
 		caption2imgids = {}

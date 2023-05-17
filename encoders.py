@@ -9,6 +9,7 @@ import torch.nn as nn
 import torchtext
 import torchvision
 from torch.nn.utils.rnn import pack_padded_sequence
+from torch.nn.utils.rnn import pad_packed_sequence
 from resnet import resnet50, resnet18
 
 from utils import l2norm

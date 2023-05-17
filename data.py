@@ -12,11 +12,11 @@ from dataset_f200k import Fashion200K
 
 
 ################################################################################
-# *** GET FUNCTIONS FOR DATA LOADERS
+#  GET FUNCTIONS FOR DATA LOADERS 获取数据加载的函数
 ################################################################################
 
-# Generic functions
-
+# Generic functions 通用函数，重载函数
+# 获取单个数据加载器
 def get_loader_single(opt, vocab, split, transform, what_elements="triplet",
 						shuffle=True, drop_last=False):
 
@@ -46,7 +46,6 @@ def get_loader_single(opt, vocab, split, transform, what_elements="triplet",
 
 	return data_loader
 
-
 def get_eval_loader_generic(opt, vocab, split, what_elements):
 	transform = get_transform(opt, phase="eval")
 	loader = get_loader_single(opt, vocab, split, transform, what_elements,
@@ -54,7 +53,7 @@ def get_eval_loader_generic(opt, vocab, split, what_elements):
 	return loader
 
 # Functions to be called from outside this file
-
+# 从此文件外部调用的函数
 def get_train_loader(opt, vocab, split='train', shuffle=True):
 	transform = get_transform(opt, phase="train")
 	triplet_loader = get_loader_single(opt, vocab, split, transform, "triplet",
@@ -77,7 +76,7 @@ def get_soft_targets_loader(opt, vocab, split='val'):
 
 
 ################################################################################
-# *** COLLATE FN FUNCTIONS
+# *** COLLATE FN FUNCTIONS 整理fn函数
 ################################################################################
 
 def get_collate_fn(what_elements):
@@ -115,14 +114,17 @@ def collate_fn_triplet(data):
 	"""
 
 	# Sort a data list by sentence length
+	# 按句子长度排序数据列表
 	data.sort(key=lambda x: len(x[1]), reverse=True)
 	images_src, sentences, images_trg, raw_caps, dataset_ids = zip(*data)
 
 	# Merge images (convert tuple of 3D tensor to 4D tensor)
+	# 合并图像(将3D张量元组转换为4D张量)
 	images_src = torch.stack(images_src, 0)
 	images_trg = torch.stack(images_trg, 0)
 
 	# Merge sentences (convert tuple of 1D tensor to 2D tensor)
+	# 合并句子(将一维张量元组转换为二维张量)
 	lengths = torch.tensor([len(cap) for cap in sentences])
 	sentences_padded = torch.zeros(len(sentences), max(lengths)).long()
 	for i, cap in enumerate(sentences):
@@ -154,13 +156,16 @@ def collate_fn_query(data):
 	"""
 
 	# Sort a data list by sentence length
+	# 按句子长度排序数据列表
 	data.sort(key=lambda x: len(x[1]), reverse=True)
 	images_src, sentences, img_src_ids, img_trg_ids, raw_caps, dataset_ids = zip(*data)
 
 	# Merge images (convert tuple of 3D tensor to 4D tensor)
+	# 合并图像(将3D张量元组转换为4D张量)
 	images_src = torch.stack(images_src, 0)
 
 	# Merge sentences (convert tuple of 1D tensor to 2D tensor)
+	# 合并句子(将一维张量元组转换为二维张量)
 	lengths = torch.tensor([len(cap) for cap in sentences])
 	sentences_padded = torch.zeros(len(sentences), max(lengths)).long()
 	for i, cap in enumerate(sentences):
@@ -183,9 +188,10 @@ def collate_fn_img_with_id(data):
 		ids: IDs of the image
 		dataset_ids: index of the element in the dataset.
 	"""
-	# Extract data
+	# Extract data 提取数据
 	images, ids, dataset_ids = zip(*data)
 	# Merge images (convert tuple of 3D tensor to 4D tensor)
+	# 合并图像(将3D张量元组转换为4D张量)
 	images = torch.stack(images, 0)
 	return images, ids, dataset_ids
 
@@ -204,11 +210,12 @@ def collate_fn_tensor_with_index(data):
 	# Extract data
 	things, dataset_ids = zip(*data)
 	# Merge things (convert tuple of *D tensor to (*+1)D tensor)
+	# 合并things（转换*D张量的元组 到 (*+1)D张量）
 	things = torch.stack(things, 0)
 	return things, dataset_ids
 
 
-def collate_fn_direct(data):
+def collate_fn_direct(data):  # 处理一个batch的数据
 	"""Build mini-batch tensors from a list of tuples.
 	Args:
 		data: list of tuples

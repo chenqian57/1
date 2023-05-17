@@ -1,4 +1,3 @@
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -60,25 +59,7 @@ class ContrastiveLoss(nn.Module):
 		diagonal_is_all = (0.4 * diagonal_is + 0.6 * diagonal_is_trm)
 		diagonal_em_all = (0.6 * diagonal_em_trm + 0.4 * diagonal_em)
 
-
-
-
-
 		cost_s = (self.margin + diagonal_is_all - diagonal_em_all).clamp(min=0)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 		return cost_s.sum(0)
 
 class ContrastiveLoss_all(nn.Module):
@@ -121,23 +102,6 @@ class ContrastiveLoss_all(nn.Module):
 		diagonal_is_all = (0.4 * diagonal_is + 0.6 * diagonal_is_trm)
 		diagonal_em_all = (0.6 * diagonal_em_trm + 0.4 * diagonal_em)
 
-
-
-
-
 		cost_s = (self.margin + diagonal_is_all - diagonal_em_all).clamp(min=0)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 		return cost_s.sum(0)
